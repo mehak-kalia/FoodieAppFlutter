@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768732737932",
+    "project_id": "loginpage-8b4ff",
+    "storage_bucket": "loginpage-8b4ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768732737932:android:fd6bac57aadb5c3ee666a9",
+        "android_client_info": {
+          "package_name": "com.example.flutter_trial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768732737932-4qgvmiirnd9392vgin3rpv80ve1go9bv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5dvF5QQJ-QhivA5PwAW8qrgWOgW69vaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768732737932-4qgvmiirnd9392vgin3rpv80ve1go9bv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
