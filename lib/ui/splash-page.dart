@@ -43,7 +43,7 @@ class SplashPage extends StatelessWidget {
              if(uid == "QXVlFf0E1TRPu2d6oGUqYhXiy6n1")
              {Navigator.pushReplacementNamed(context, "/admin");}
             else{
-              Navigator.pushReplacementNamed(context, "/");};
+              Navigator.pushReplacementNamed(context, "/ui");};
           }else {
             Navigator.pushReplacementNamed(context, "/login");
           }
@@ -54,9 +54,9 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    //navigateToHome(context);
-    //fetchUserDetails();
-    tutorialNavigation(context);
+    navigateToHome(context);
+    fetchUserDetails();
+    //tutorialNavigation(context);
 
 
     return Scaffold(
