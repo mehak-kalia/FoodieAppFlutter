@@ -1,4 +1,4 @@
-# flutter_trial
+# Foodie-App-Flutter
 
 A new Flutter project.
 
