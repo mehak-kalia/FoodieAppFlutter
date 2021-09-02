@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trial/model/user.dart';
+import 'package:flutter_trial/profile/user-addresses.dart';
 import 'package:flutter_trial/ui/home-page.dart';
 import 'package:flutter_trial/util/constants.dart';
 import 'package:image_picker/image_picker.dart';
@@ -98,6 +99,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   }
 
+  fetchAddress() async{
+    String uid = await FirebaseAuth.instance.currentUser!.uid.toString();
+    var address = await FirebaseFirestore.instance
+        .collection(Util.USERS_COLLECTION)
+        .doc(Util.appUser!.uid).collection(Util.ADDRESS_COLLECTION);
+
+
+    if (Util.ADDRESS_COLLECTION != null){
+      Navigator.pushReplacementNamed(context, "/address");
+    }
+    else{
+      Navigator.pushReplacementNamed(context, "/addressnull");
+    }
+  }
 
 
   Future fetchUserDetails() async {
@@ -107,6 +122,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
         .collection(Util.USERS_COLLECTION)
         .doc(uid)
         .get();
+
+
     // appUser =AppUser();
     // print("Hello $document.get['uid'].toString()");
     // appUser!.uid = document.get('uid').toString();
@@ -122,12 +139,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
       Util.appUser!.name = document.get('name').toString();
       Util.appUser!.email = document.get('email').toString();
       Util.appUser!.imageUrl = document.get('imageUrl').toString();
+
       imageName=document.get('email').toString();
       imageUrl=Util.appUser!.imageUrl!;
     } else {
       print("error");
     }
-    return Util.appUser;
+    return Util.appUser ;
   }
 
   @override
@@ -204,7 +222,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   ),
                   subtitle: Text("Update Your Addresses for Delivery"),
                   trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                  onTap: () {},
+                  onTap: () { fetchAddress();
+
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.message),

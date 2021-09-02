@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as lc;
 
@@ -21,7 +21,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
   bool? _serviceEnabled;
   lc.PermissionStatus? _permissionGranted;
   lc.LocationData? _locationData;
-  final geo = Geoflutterfire();
+
 
   //Address? firstAddress;
 
@@ -49,7 +49,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
     }
 
     _locationData = await location.getLocation();
-    GeoFirePoint myLocation = geo.point(latitude: _locationData!.latitude!, longitude: _locationData!.longitude!);
+
 
    // final coordinates = new Coordinates(1.10, 45.50);
    // var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
@@ -64,7 +64,7 @@ class _GoogleMapsPageState extends State<GoogleMapsPage> {
 
 
       );
-      return myLocation.data;
+
 
     });
 

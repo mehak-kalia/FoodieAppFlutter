@@ -56,6 +56,7 @@ class SplashPage extends StatelessWidget {
 
     navigateToHome(context);
     fetchUserDetails();
+
     //tutorialNavigation(context);
 
 

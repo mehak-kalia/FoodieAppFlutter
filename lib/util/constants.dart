@@ -13,6 +13,7 @@ class Util {
   static String RESTAURANT_COLLECTION = "restaurants";
   static String DISHES_COLLECTION = "dishes";
   static String CART_COLLECTION = "cart";
+  static String ADDRESS_COLLECTION = "addresses";
   static AppUser? appUser;
 }
 
