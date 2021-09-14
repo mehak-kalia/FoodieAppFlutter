@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_trial/pages/cart-page.dart';
 import 'package:flutter_trial/pages/restaurants-page.dart';
 import 'package:flutter_trial/profile/user-profile.dart';
 import 'package:flutter_trial/util/constants.dart';
@@ -31,7 +32,9 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: (){
-              Navigator.pushReplacementNamed(context, "/cart");
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CartPage())
+              );
             }, icon: Icon(Icons.shopping_cart),
             tooltip: "Cart",
 
@@ -47,7 +50,11 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
 
-      body: widgets[index],
+      body: Container(/*decoration: BoxDecoration(
+          image: DecorationImage(fit: BoxFit.fill,
+              image: AssetImage("bg.png"))
+      ),*/
+          child: widgets[index]),
 
       bottomNavigationBar: BottomNavigationBar(
         items: [

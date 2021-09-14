@@ -98,10 +98,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trial/custom-widgets/counter.dart';
+import 'package:flutter_trial/pages/razorpay-payment-page.dart';
+import 'package:flutter_trial/pages/success.dart';
 import 'package:flutter_trial/util/constants.dart';
 
 class CartPage extends StatefulWidget {
-
   const CartPage({Key? key}) : super(key: key);
 
   @override
@@ -111,156 +112,159 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
 
   int total = 0;
+  String paymentMethod = "";
 
-  fetchDishesInCart(){
-    print("fetchDishesInCart");
-    Stream<QuerySnapshot> stream = FirebaseFirestore.instance.collection(Util.USERS_COLLECTION).doc(Util.appUser!.uid).collection(Util.CART_COLLECTION).snapshots();
-    print("stream");
+  var dishes = [];
+
+  fetchDishesFromCart(){
+    // Stream is a Collection i.e. a List of QuerySnapshot
+    // QuerySnapshot is our Document :)
+    Stream<QuerySnapshot> stream = FirebaseFirestore.instance.collection(Util.USERS_COLLECTION)
+        .doc(Util.appUser!.uid).collection(Util.CART_COLLECTION).snapshots();
     return stream;
+  }
+
+  placeOrder(){
+    Map<String, dynamic> order = Map<String, dynamic>();
+    order['dishes'] = dishes;
+    order['total'] = total;
+    order['restaurantID'] = dishes.first['restaurantID'];
+    order['address'] = 'NA';
+
+    // Firebase Insert Operation
+    FirebaseFirestore.instance.collection(Util.USERS_COLLECTION)
+        .doc(Util.appUser!.uid)
+        .collection(Util.ORDER_COLLECTION).doc().set(order);
+  }
+
+  clearCart(){
+    dishes.forEach((dish) {
+      // delete every single dish one by one async :)
+      FirebaseFirestore.instance.collection(Util.USERS_COLLECTION).doc(Util.appUser!.uid).collection(Util.CART_COLLECTION).doc(dish['documentID']).delete();
+    });
+  }
+
+  navigateToSuccess(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
+    => SuccessPage(title: "Order Placed", message: "Thank You For Placing the Order \u20b9 ${total}", flag: true),));
   }
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back),
-        onPressed: () {
-        Navigator.popAndPushNamed(context, "/ui");
-        }),
-        title: Text(Util.APP_NAME+ " Cart"),
-
-
-        actions: [
-          IconButton(
-            onPressed: (){
-              Navigator.pushReplacementNamed(context, "/cart");
-            }, icon: Icon(Icons.shopping_cart),
-            tooltip: "Shopping Cart",
-          ),
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-              Navigator.pushReplacementNamed(context, "/login");
-            },
-            icon: Icon(Icons.logout),
-            tooltip: "Log Out",
-          ),
-        ],
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+        title: Text("CART"),
       ),
+      body: StreamBuilder(
+        stream: fetchDishesFromCart(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
 
-      body: Column(
-        children: [
-          StreamBuilder(
-              stream: fetchDishesInCart(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text("SOMETHING WENT WRONG",
-                        style: TextStyle(color: Colors.red)),
-                  );
-                }
+          if(snapshot.hasError){
+            return Center(
+              child: Text("SOMETHING WENT WRONG", style: TextStyle(color: Colors.red),),
+            );
+          }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-                //List data = [10, 20, 30];
-                //List data1 = data.map((e) => e+10).toList();
-
-                /*List<DocumentSnapshot> snapshots = snapshot.data!.docs;
-              List<ListTile> tiles = [];
-              snapshots.forEach((document) {
+          return ListView(
+              padding: EdgeInsets.all(16),
+              children: snapshot.data!.docs.map<Widget>((DocumentSnapshot document){
                 Map<String, dynamic> map = document.data()! as Map<String, dynamic>;
-                tiles.add(
-                    ListTile(
-                      title: Text(map['name']),
-                      subtitle: Text(map['categories']),
-                    )
-                )
-              });*/
+                map['totalprice'] = (map['price']*map['quantity']) as int;
 
-                return ListView(
-                    children: [Column(
-                        children: snapshot.data!.docs
-                            .map<Widget>((DocumentSnapshot document) {
-                          Map<String, dynamic> map = document.data()! as Map<String, dynamic>;
-                          map['docId'] = document.id.toString();
+                total += map['totalprice'] as int;
 
-                          total += map["price"]*map["quantity"] as int;
-                          return Column(
-                            children: [
-                              ListTile(
-                                leading: Icon(Icons.fastfood),
-                                title: Text(map["name"]),
-                                subtitle: Text(" ${map["quantity"].toString()} * ₹${map["price"]}"),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text("="),
+                return Card(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(map['name'], style: TextStyle(fontSize: 22),),
+                        SizedBox(height: 5,),
+                        Text("Price \u20b9"+map['price'].toString(), style: TextStyle(color: Colors.black54, fontSize: 18),),
+                        SizedBox(height: 5,),
+                        Row(
+                          children: [
+                            Text(map['totalPrice'].toString(), style: TextStyle(fontSize: 22),),
+                            Spacer(),
+                            Text("Quantity: ", style: TextStyle(fontSize: 18, color: Colors.grey),),
+                            Text(map['quantity'].toString(), style: TextStyle(fontSize: 22),),
+                          ],
+                        ),
 
-                                    Text(" ₹${(map["price"]*map["quantity"]).toString()} ")
-                                  ],
-                                ),
-                              ),
-
-                            ],
-                          );
-                        }).toList()
+                      ],
                     ),
-                      Divider(),
+                  ),
+                );
+              }).toList()
+          );
+        },
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16.0),
+        height: 120,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:[
 
-                    ]);
-              }),
-
-        ],
-      ),      bottomNavigationBar: Row(crossAxisAlignment: CrossAxisAlignment.end,
-        children:[Container(padding: EdgeInsets.all(8),
-
-            width: (MediaQuery.of(context).size.width)/2,
-            height: 12,
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-
-                border: Border(
-                    bottom: BorderSide(color: Colors.green),
-                    left: BorderSide(color: Colors.green) ,
-                    right: BorderSide(color: Colors.green) ,
-                    top: BorderSide(color: Colors.green)
-                )
-            ),
-            child: Column(
-                children: [Text("Set Payment", style: TextStyle( fontSize: 15), ),
-                  SizedBox(height: 5,),
-                  Text("Payment Method", style: TextStyle( fontSize: 18) ),
-                ]
-
-            )
-        ),
-          SizedBox(height: 5,),
-          Container(padding: EdgeInsets.all(8),
-
-              width: (MediaQuery.of(context).size.width)/2,
-              height: 120,
-
-              decoration: BoxDecoration(
-
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.green,
+              Column(
+                children: [
+                  Text("Payment Method: ${paymentMethod}"),
+                  OutlinedButton(
+                      onPressed: () async{
+                        paymentMethod = await Navigator.pushNamed(context, "/payment") as String;
+                      setState(() {
+                        total == 0;
+                      });
+                      }, child: Text("Select Payment"))
+                ],
               ),
-              child: Column(
-                  children: [Text("Proceed To Pay" ,style: TextStyle(color: Colors.white , fontSize: 18)),
-                    SizedBox(height: 5,),
-                    Text("Total Price: ${total}" ,style: TextStyle(color: Colors.white , fontSize: 15)),
-                  ]
+              Spacer(),
 
-              ))
-        ]
+              Column(
+                children: [
+                  Text("Total \u20b9${total}"),
+                  OutlinedButton(
+                      onPressed: () async {
+                        if(paymentMethod.isNotEmpty){
 
-    ),
+                          int result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RazorPayPaymentPage(amount: total),));
+
+                          if(result == 1){
+                            // Save the data i.e. Dishes as Order in Orders Collection under User
+                            // Order Object -> 1. List of Dishes, 2. Total 3. Address, 4. Restaurant Details
+
+                            placeOrder();
+                            clearCart();
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
+                            => SuccessPage(title: "Order Placed", message: "Thank You For Placing the Order \u20b9 ${total}", flag: true),));
+
+                          }
+
+                          /*if(paymentMethod == "RazorPay"){
+                  }else if(paymentMethod == "Paytm"){
+                  }else{
+                  }*/
+
+                        }
+                      }, child: Text("PLACE ORDER"))
+                ],
+              ),
+
+
+
+            ]
+        ),
+      ),
     );
   }
+
 }

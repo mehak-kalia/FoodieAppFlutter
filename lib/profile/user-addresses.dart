@@ -75,7 +75,9 @@ class _UserAddressesPageState extends State<UserAddressesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back),
-        onPressed: () => Navigator.of(context).pushReplacementNamed("/user")),
+          onPressed: () {
+            Navigator.pop(context, false);
+          }),
 
           title: Text("Add Address"),),
       //body: StreamBuilder(),
@@ -114,12 +116,14 @@ class _UserAddressesPageState extends State<UserAddressesPage> {
                     return Column(
                       children: [
                         ListTile(
-                          //leading:Image.network(map["imageUrl"]),
-                          title: Text(map["label"]),
-                          subtitle: Text("Address: ${map["address"]
-                              .toString()}"  ),
+                          leading: IconButton(
+                            icon: Icon(Icons.home),
+                            onPressed: (){},
+                          ),
+                          title: Text(map["label"].toString(), style: TextStyle()),
+
                           onTap: (){
-                            Navigator.pushNamed(context, "/addaddress");
+                            Navigator.pushNamed(context, "/updateaddress");
                           },
 
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_trial/custom-widgets/counter.dart';
 import 'package:flutter_trial/model/dish.dart';
+import 'package:flutter_trial/pages/cart-page.dart';
 import 'package:flutter_trial/util/constants.dart';
 
 class DishesPage extends StatefulWidget {
@@ -34,7 +35,9 @@ class _DishesPageState extends State<DishesPage> {
           actions: [
             IconButton(
               onPressed: (){
-                Navigator.pushReplacementNamed(context, "/cart");
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CartPage())
+                );
               }, icon: Icon(Icons.shopping_cart),
               tooltip: "Cart",
 

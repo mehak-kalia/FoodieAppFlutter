@@ -22,7 +22,7 @@ class SplashPage extends StatelessWidget {
     Future.delayed(
         Duration(seconds: 3),
             (){
-          Navigator.pushNamed(context, "/google-maps");
+          Navigator.pushNamed(context, "/marquee");
         }
     );
   }

@@ -14,6 +14,8 @@ class Util {
   static String DISHES_COLLECTION = "dishes";
   static String CART_COLLECTION = "cart";
   static String ADDRESS_COLLECTION = "addresses";
+  static String EXTRA_COLLECTION = "extras";
+  static String ORDER_COLLECTION = "orders";
   static AppUser? appUser;
 }
 

@@ -107,10 +107,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
 
     if (Util.ADDRESS_COLLECTION != null){
-      Navigator.pushReplacementNamed(context, "/address");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => UserAddressesPage())
+      );
     }
     else{
-      Navigator.pushReplacementNamed(context, "/addressnull");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => UserAddressesEmptyPage())
+      );
     }
   }
 
@@ -150,105 +154,127 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-        future: fetchUserDetails(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasData) {
-            return ListView(
-              padding: EdgeInsets.all(16),
-              children: [
-                Card(
-                  elevation: 10,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(padding: EdgeInsets.all(8)),
-                      InkWell(
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(imageUrl),
-                          radius: 100,
+    return Scaffold(
+      body: FutureBuilder<dynamic>(
+          future: fetchUserDetails(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              return Container(decoration: BoxDecoration(
+                  image: DecorationImage(fit: BoxFit.fill,
+                      image: AssetImage("bg.png"))
+              ),
+                child: ListView(
+                  padding: EdgeInsets.all(16),
+                  children: [
+                    Card(
+                      elevation: 10,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(padding: EdgeInsets.all(8)),
+                          InkWell(
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(imageUrl),
+                              radius: 80,
+                            ),
+                            onTap: () {
+                              _askedToLead();
+                              //image picker logic
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            Util.appUser!.name.toString(),
+                            style: TextStyle(color: Colors.blueGrey, fontSize: 20),
+                          ),
+                          Text(
+                            Util.appUser!.email.toString(),
+                            style: TextStyle(color: Colors.black38, fontSize: 15),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Container(color: Colors.white,
+                      child: ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text(
+                          "Manage Profile",
                         ),
-                        onTap: () {
-                          _askedToLead();
-                          //image picker logic
+                        subtitle: Text("Update Your Data for Your Account"),
+                        trailing: Icon(Icons.keyboard_arrow_right_sharp),
+                        onTap: () {},
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Container(color: Colors.white,
+                      child: ListTile(
+                        leading: Icon(Icons.shopping_cart),
+                        title: Text(
+                          "Manage Orders",
+                        ),
+                        subtitle: Text("Manage your Order History here"),
+                        trailing: Icon(Icons.keyboard_arrow_right_sharp),
+                        onTap: () {},
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Container(color: Colors.white,
+                      child: ListTile(
+                        leading: Icon(Icons.home),
+                        title: Text(
+                          "Manage Addresses",
+                        ),
+                        subtitle: Text("Update Your Addresses for Delivery"),
+                        trailing: Icon(Icons.keyboard_arrow_right_sharp),
+                        onTap: () { fetchAddress();
+
                         },
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(8),
+                    ),
+                    SizedBox(height: 10,),
+                    Container(color: Colors.white,
+                      child: ListTile(
+                        leading: Icon(Icons.message),
+                        title: Text(
+                          "Help",
+                        ),
+                        subtitle: Text("Raise your Queries"),
+                        trailing: Icon(Icons.keyboard_arrow_right_sharp),
+                        onTap: () {},
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        Util.appUser!.name.toString(),
-                        style: TextStyle(color: Colors.blueGrey, fontSize: 20),
-                      ),
-                      Text(
-                        Util.appUser!.email.toString(),
-                        style: TextStyle(color: Colors.black38, fontSize: 15),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text(
-                    "Manage Profile",
-                  ),
-                  subtitle: Text("Update Your Data for Your Account"),
-                  trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: Icon(Icons.shopping_cart),
-                  title: Text(
-                    "Manage Orders",
-                  ),
-                  subtitle: Text("Manage your Order History here"),
-                  trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: Icon(Icons.home),
-                  title: Text(
-                    "Manage Addresses",
-                  ),
-                  subtitle: Text("Update Your Addresses for Delivery"),
-                  trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                  onTap: () { fetchAddress();
+                    ),
+                    SizedBox(height: 10,),
+                    Container(color: Colors.white,
+                      child: ListTile(
 
-                  },
+                        leading: Icon(Icons.document_scanner_outlined),
+                        title: Text(
+                          "Terms & Conditions",
+                        ),
+                        subtitle: Text("Check our Terms and Conditions"),
+                        trailing: Icon(Icons.keyboard_arrow_right_sharp),
+                        onTap: () {},
+                      ),
+                    ),
+                  ],
                 ),
-                ListTile(
-                  leading: Icon(Icons.message),
-                  title: Text(
-                    "Help",
-                  ),
-                  subtitle: Text("Raise your Queries"),
-                  trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: Icon(Icons.document_scanner_outlined),
-                  title: Text(
-                    "Terms & Conditions",
-                  ),
-                  subtitle: Text("Check our Terms and Conditions"),
-                  trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                  onTap: () {},
-                ),
-              ],
-            );
-          } else {
-            return Center(child: CircularProgressIndicator(),);
-          }
-        });
+              );
+            } else {
+              return Center(child: CircularProgressIndicator(),);
+            }
+          }),
+    );
   }
 }

@@ -16,7 +16,7 @@ class _AnimationPageState extends State<AnimationPage> {
   double margin = 10;
 
   void updateAttributes(){
-    color = Color(0xFFFFFFFF & Random(0xFFFFFFFF) )
+
   }
   @override
   void initState(){

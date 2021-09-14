@@ -5,12 +5,15 @@ import 'package:flutter_trial/auth/login-page.dart';
 import 'package:flutter_trial/auth/register-page.dart';
 import 'package:flutter_trial/pages/add-address.dart';
 import 'package:flutter_trial/pages/cart-page.dart';
+import 'package:flutter_trial/pages/payment-methods-page.dart';
+import 'package:flutter_trial/pages/update-address.dart';
 import 'package:flutter_trial/profile/user-addresses.dart';
 import 'package:flutter_trial/profile/user-profile.dart';
 import 'package:flutter_trial/tutorials/assignment.dart';
 import 'package:flutter_trial/tutorials/fetch-current-location.dart';
 import 'package:flutter_trial/tutorials/google-maps-with-location.dart';
 import 'package:flutter_trial/tutorials/image-picker-task.dart';
+import 'package:flutter_trial/tutorials/marquee-page.dart';
 import 'package:flutter_trial/ui/admin-page.dart';
 import 'package:flutter_trial/ui/home-page.dart';
 import 'package:flutter_trial/ui/splash-page.dart';
@@ -135,8 +138,12 @@ class _MyAppState extends State<MyApp> {
         "/address": (context) => UserAddressesPage(),
         "/addressnull": (context) => UserAddressesEmptyPage(),
         "/addaddress": (context) => AddAddressPage(),
-        "/user": (context) => UserProfilePage()
-        //"/todo": (context) => TodosScreen(todos: [],)
+        "/user": (context) => UserProfilePage(),
+        "/payment": (context) => PaymentMethodsPage(),
+        "/updateaddress": (context) => UpdateAddressPage(),
+        "/marquee": (context) => MarqueePage()
+
+
 
 
 
