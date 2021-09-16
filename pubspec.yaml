@@ -44,6 +44,7 @@ dependencies:
   lottie: ^1.1.0
   marquee: ^2.2.0
   carousel_slider: ^4.0.0
+  algolia: ^1.0.1
 
 
 dev_dependencies:

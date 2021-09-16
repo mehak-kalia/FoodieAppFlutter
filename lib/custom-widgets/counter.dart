@@ -27,7 +27,7 @@ class _CounterState extends State<Counter> {
   updateDishInCart() async {
     Dish cartDish = Dish(
       name: widget.dish!['name'],
-      price: widget.dish!['price'],
+      price: widget.dish!['price'] as int,
       quantity: initialValue,
       totalPrice: widget.dish!['price'] * initialValue,
 
@@ -44,16 +44,7 @@ class _CounterState extends State<Counter> {
         .delete();
   }
 
-  void timer() {
-    Future.delayed(Duration(seconds: 30)).then((_) {
-      setState(() {
-        print("1 second closer to NYE!");
-        // Anything else you want
-        initialValue++;
-        updateDishInCart();
-      });
-      timer();
-    });}
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +74,7 @@ class _CounterState extends State<Counter> {
         return Container(width: (MediaQuery
             .of(context)
             .size
-            .width) / 2,
+            .width) / 4,
 
 
             decoration: BoxDecoration(
@@ -102,8 +93,10 @@ class _CounterState extends State<Counter> {
               children: [
                 TextButton(onPressed: () {
                   setState(() {
-                    initialValue++;
-                    updateDishInCart();
+                    if (Util.appUser!.email!=null) {
+                      initialValue++;
+                      updateDishInCart();
+                    } else{}
                   });
                 },
                   child: Text("ADD",
@@ -118,13 +111,12 @@ class _CounterState extends State<Counter> {
                   setState(() async{
                     if(initialValue<=0){
                       initialValue = 0;
-                    }else if(initialValue == 1){
-                      initialValue--;
-                      await updateDishInCart();
-                      deleteDishFromCart();
                     }else{
                       initialValue--;
                       updateDishInCart();
+                      if(initialValue <= 0){
+                        deleteDishFromCart();
+                      }
                     }
                   });
                 },

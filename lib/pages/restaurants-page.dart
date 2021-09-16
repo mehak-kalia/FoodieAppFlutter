@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_trial/custom-widgets/carousel-slider.dart';
 import 'package:flutter_trial/pages/dishes-page.dart';
 import 'package:flutter_trial/util/constants.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 
 class RestaurantsPage extends StatefulWidget {
   const RestaurantsPage({Key? key}) : super(key: key);
@@ -15,8 +16,8 @@ class RestaurantsPage extends StatefulWidget {
 }
 
 class _RestaurantsPageState extends State<RestaurantsPage> {
-  List<String> imagesList = [];
-  int index = 0;
+  //List<String> imagesList = [];
+  //int index = 0;
 
   fetchRestaurants(){
     // Stream is a Collection i.e. a List of QuerySnapshot
@@ -25,7 +26,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
     return stream;
   }
 
-  Future fetchCarouselpics() async {
+  /*Future fetchCarouselpics() async {
     await FirebaseFirestore.instance.collection(Util.EXTRA_COLLECTION).doc('carousel-photos').get()
         .then((value){
           setState(() {
@@ -40,7 +41,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
 
         return imagesList;
         });
-  }
+  }*/
 
    @override
   Widget build(BuildContext context) {
@@ -50,7 +51,8 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
 
       child: Column(
         children: [
-          FutureBuilder<dynamic>(
+          Carouselslider(),
+          /*FutureBuilder<dynamic>(
               future: fetchCarouselpics(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 //print("List: ${}");
@@ -68,7 +70,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
 
               }),
 
-          /*StreamBuilder(
+          StreamBuilder(
             stream: fetchCarouselpics(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
 
@@ -209,38 +211,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                       );
                     }).toList()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                );
+              );
 
 
             },

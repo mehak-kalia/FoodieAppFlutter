@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trial/pages/cart-page.dart';
 import 'package:flutter_trial/pages/restaurants-page.dart';
+import 'package:flutter_trial/pages/search-page.dart';
 import 'package:flutter_trial/profile/user-profile.dart';
 import 'package:flutter_trial/util/constants.dart';
 
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> widgets = [
     RestaurantsPage(),
-    Center(child: Text("SEARCH PAGE")),
+    MyHomePage(),
     UserProfilePage()
   ];
 
