@@ -1,6 +1,7 @@
 # Foodie-App-Flutter
 
-A new Flutter project.
+Flutter project to develop a food ordering app
+
 
 ## Getting Started
 
