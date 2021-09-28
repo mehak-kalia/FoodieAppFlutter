@@ -17,6 +17,11 @@ class Util {
   static String EXTRA_COLLECTION = "extras";
   static String ORDER_COLLECTION = "orders";
   static AppUser? appUser;
+  static Map total={};
+  static bool checkpath=false;
+  static String filter="all";
+  static List filterlist=["all"];
+  static String const_chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
 }
 
 class Locale{

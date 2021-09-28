@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_trial/profile/user-profile.dart';
+import 'package:flutter_trial/pages/update-address.dart';
 import 'package:flutter_trial/util/constants.dart';
 
 class UserAddressesEmptyPage extends StatefulWidget {
@@ -122,18 +122,16 @@ class _UserAddressesPageState extends State<UserAddressesPage> {
                           ),
                           title: Text(map["label"].toString(), style: TextStyle()),
 
-                          onTap: (){
-                            Navigator.pushNamed(context, "/updateaddress");
-                          },
 
 
                         ),
+                        Divider()
                       ],
 
                     );
                   }).toList()
               ),
-                Divider(),
+
               ]);
         }),
     );

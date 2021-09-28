@@ -93,11 +93,14 @@ class _CartPageState extends State<CartPage> {
 
   }
 }*/
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trial/custom-widgets/counter.dart';
+import 'package:flutter_trial/model/order.dart';
 import 'package:flutter_trial/pages/razorpay-payment-page.dart';
 import 'package:flutter_trial/pages/success.dart';
 import 'package:flutter_trial/util/constants.dart';
@@ -110,9 +113,13 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-
-  int total = 0;
   String paymentMethod = "";
+  String labeladdress="";
+  var temp ;
+  bool empty=false;
+  int total = 0;
+
+  var r = Random();
 
   var dishes = [];
 
@@ -123,18 +130,24 @@ class _CartPageState extends State<CartPage> {
         .doc(Util.appUser!.uid).collection(Util.CART_COLLECTION).snapshots();
     return stream;
   }
-
-  placeOrder(){
-    Map<String, dynamic> order = Map<String, dynamic>();
-    order['dishes'] = dishes;
-    order['total'] = total;
-    order['restaurantID'] = dishes.first['restaurantID'];
-    order['address'] = 'NA';
-
+  placeOrder() {
+    print(dishes);
+    Order order = Order(
+        dishes: dishes,
+        total: temp,
+        paymentMethod: paymentMethod,
+        address: labeladdress,
+        id: List.generate(10, (index) => Util.const_chars[r.nextInt(Util.const_chars.length)]).join()
+    );
+    var dataToSave = order.toMap();
     // Firebase Insert Operation
-    FirebaseFirestore.instance.collection(Util.USERS_COLLECTION)
+    FirebaseFirestore.instance
+        .collection(Util.USERS_COLLECTION)
         .doc(Util.appUser!.uid)
-        .collection(Util.ORDER_COLLECTION).doc().set(order);
+        .collection(Util.ORDER_COLLECTION)
+        .doc()
+        .set(dataToSave)
+        .then((value) => Navigator.pushReplacementNamed(context, "/cart"));
   }
 
   clearCart(){
@@ -150,6 +163,9 @@ class _CartPageState extends State<CartPage> {
   }
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -179,7 +195,14 @@ class _CartPageState extends State<CartPage> {
                 Map<String, dynamic> map = document.data()! as Map<String, dynamic>;
                 map['totalprice'] = (map['price']*map['quantity']) as int;
 
-                total += map['totalprice'] as int;
+                Util.total[map["name"]] = map["totalprice"] as int;
+
+
+                Util.total.values.forEach((element) {
+                  total += element as int;
+                });
+                dishes.add(map);
+
 
                 return Card(
                   child: Container(
@@ -222,7 +245,7 @@ class _CartPageState extends State<CartPage> {
                       onPressed: () async{
                         paymentMethod = await Navigator.pushNamed(context, "/payment") as String;
                       setState(() {
-                        total == 0;
+
                       });
                       }, child: Text("Select Payment"))
                 ],
@@ -230,13 +253,14 @@ class _CartPageState extends State<CartPage> {
               Spacer(),
 
               Column(
+
                 children: [
                   Text("Total \u20b9${total}"),
                   OutlinedButton(
                       onPressed: () async {
                         if(paymentMethod.isNotEmpty){
 
-                          int result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RazorPayPaymentPage(amount: total),));
+                          int result = await Navigator.push(context, MaterialPageRoute(builder: (context) => RazorPayPaymentPage(amount: total*1000),));
 
                           if(result == 1){
                             // Save the data i.e. Dishes as Order in Orders Collection under User
@@ -245,7 +269,7 @@ class _CartPageState extends State<CartPage> {
                             placeOrder();
                             clearCart();
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
-                            => SuccessPage(title: "Order Placed", message: "Thank You For Placing the Order \u20b9 ${total}", flag: true),));
+                            => SuccessPage(title: "Order Placed", message: "Thank You For Placing the Order \u20b9 ${temp}", flag: true),));
 
                           }
 

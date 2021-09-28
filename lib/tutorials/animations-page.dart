@@ -33,9 +33,6 @@ class PageOne extends StatelessWidget {
 
       ),
       body: Center(
-        child: TextButton(
-          child: T,
-        )
 
       ),
     );

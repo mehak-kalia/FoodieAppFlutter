@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trial/model/user.dart';
+import 'package:flutter_trial/pages/show-orders.dart';
 import 'package:flutter_trial/profile/user-addresses.dart';
 import 'package:flutter_trial/ui/home-page.dart';
 import 'package:flutter_trial/util/constants.dart';
@@ -226,7 +227,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                         subtitle: Text("Manage your Order History here"),
                         trailing: Icon(Icons.keyboard_arrow_right_sharp),
-                        onTap: () {},
+                        onTap: () {
+
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => OrdersPage())
+                          );
+                        },
                       ),
                     ),
                     SizedBox(height: 10,),

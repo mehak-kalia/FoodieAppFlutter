@@ -74,7 +74,7 @@ class _CounterState extends State<Counter> {
         return Container(width: (MediaQuery
             .of(context)
             .size
-            .width) / 4,
+            .width) / 2,
 
 
             decoration: BoxDecoration(

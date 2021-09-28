@@ -25,7 +25,6 @@ class _CarouselsliderState extends State<Carouselslider> {
           var url = (element);
 
           imagesList.add(url);
-          print("images: ${imagesList}");
 
         });
       });
